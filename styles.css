@@ -1,0 +1,28 @@
+button{
+    font-size: 30px;
+    width: 60px;
+}
+
+.calculator{
+    height: 600px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.clear{
+    background-color: lightcoral;
+}
+
+.equals{
+    background-color: lightblue;
+}
+
+
+
+#text{
+    padding-top: 6px;
+    direction: rtl;
+    font-size: 30px;
+}

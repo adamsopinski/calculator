@@ -1,23 +1,40 @@
 function add(a, b){
-    return a + b;
-}
-
-function subtract(a, b){
-    return a - b;
-}
-
-function multiply(a, b){
-    return a * b;
-}
-
-function divide(a, b){
-    let value = (a/b).toFixed(5).toString();
-    console.log(value);
+    let value = (a+b).toFixed(18).toString();
     while(value[value.length - 1] == "0"){
         value = value.substring(0, value.length - 1);
     }
-    console.log(value);
-    return parseInt(value);
+    return parseFloat(value);
+}
+
+function subtract(a, b){
+    let value = (a-b).toFixed(18).toString();
+    while(value[value.length - 1] == "0"){
+        value = value.substring(0, value.length - 1);
+    }
+    return parseFloat(value);
+}
+
+function multiply(a, b){
+    let value = (a*b).toFixed(18).toString();
+    while(value[value.length - 1] == "0"){
+        value = value.substring(0, value.length - 1);
+    }
+    return parseFloat(value);
+}
+
+function divide(a, b){
+
+    if(b == 0){
+        alert("ERROR: You can't divide by zero.")
+        return 0;
+    }
+    else{
+    let value = (a/b).toFixed(18).toString();
+    while(value[value.length - 1] == "0"){
+        value = value.substring(0, value.length - 1);
+    }
+    return parseFloat(value);
+}
 }
 
 function operate(a, b, operator){
@@ -41,17 +58,16 @@ const digits = document.querySelectorAll('.num');
 
 digits.forEach((digit) => {
     digit.addEventListener('click', () =>{
-        if(text.value == "x" || text.value == "+" || text.value == "÷" || text.value == "-" || text.value == "0"){
+        if(text.value == "x" || text.value == "+" || text.value == "÷" || text.value == "-"){
             text.value = "";
         }
 
-        if(inOperation){
+        if(inOperation && (Number.isInteger(parseInt(text.value)))) {
             firstOperand = text.value;
             text.value = "";
         }
         
         text.value += digit.textContent;
-        inOperation = false;
     });
 });
 
@@ -59,15 +75,24 @@ const operators = document.querySelectorAll('.operator');
 
 operators.forEach((operator) => {
     operator.addEventListener('click', () =>{
+        decimalButton.disabled = false;
 
-        if(firstOperand && text.value) {
+        if(firstOperand){
             inOperation = true;
-            firstOperand = operate(parseInt(firstOperand), parseInt(text.value), currentOperator);
-            text.value = firstOperand;
+        }
+        if (text.value == "+" || text.value == "-" || text.value == "x" || text.value == "÷"){
+            text.value = operator.textContent;
+        }
+        else if(firstOperand && text.value && inOperation){
+            text.value = operate(parseFloat(firstOperand), parseFloat(text.value), currentOperator);
+            decimalButton.disabled = false;
+            firstOperand = "";
         }
         else{
-            firstOperand = text.value;
-            text.value = currentOperator;
+            if(Number.isInteger(parseInt(text.value))){
+                firstOperand = text.value;
+            }
+            text.value = operator.textContent;
         }
 
         currentOperator = operator.textContent;
@@ -78,14 +103,36 @@ const clearButton = document.querySelector('.clear');
 
 clearButton.addEventListener('click', () => {
     text.value = "";
-    firstOperand = 0;
+    firstOperand = null;
+    currentOperator = "";
     inOperation = false;
+    decimalButton.disabled = false;
 });
 
 const equalsButton = document.querySelector('.equals');
 
 equalsButton.addEventListener('click', () => {
-    text.value = operate(parseInt(firstOperand), parseInt(text.value), currentOperator);
-    inOperation = false;
 
+    if(!currentOperator || !text.value || !firstOperand){
+        //do nothing
+    }else{
+        text.value = operate(parseFloat(firstOperand), parseFloat(text.value), currentOperator);
+        inOperation = false;
+        firstOperand = "";
+        decimalButton.disabled = false;
+    }
+
+});
+
+const decimalButton = document.querySelector('.decimal');
+
+decimalButton.addEventListener('click', () => {
+
+    if (text.value == "+" || text.value == "-" || text.value == "x" || text.value == "÷"){ //|| (inOperation)){
+        text.value = "";
+    }
+    if (decimalButton.disabled == false){
+        text.value += ".";
+        decimalButton.disabled = true;
+    }
 });
