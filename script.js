@@ -1,5 +1,5 @@
 function add(a, b){
-    let value = (a+b).toFixed(18).toString();
+    let value = (a+b).toFixed(10).toString();
     while(value[value.length - 1] == "0"){
         value = value.substring(0, value.length - 1);
     }
@@ -7,7 +7,7 @@ function add(a, b){
 }
 
 function subtract(a, b){
-    let value = (a-b).toFixed(18).toString();
+    let value = (a-b).toFixed(10).toString();
     while(value[value.length - 1] == "0"){
         value = value.substring(0, value.length - 1);
     }
@@ -15,7 +15,7 @@ function subtract(a, b){
 }
 
 function multiply(a, b){
-    let value = (a*b).toFixed(18).toString();
+    let value = (a*b).toFixed(10).toString();
     while(value[value.length - 1] == "0"){
         value = value.substring(0, value.length - 1);
     }
@@ -29,7 +29,7 @@ function divide(a, b){
         return 0;
     }
     else{
-    let value = (a/b).toFixed(18).toString();
+    let value = (a/b).toFixed(10).toString();
     while(value[value.length - 1] == "0"){
         value = value.substring(0, value.length - 1);
     }
@@ -46,7 +46,7 @@ function operate(a, b, operator){
 
     if (operator == "÷") return divide(a, b);
 }
-//___________________________________________________________________________________
+//_______________________________________________________________________________________________________________
 
 let currentOperator = "";
 let firstOperand;
