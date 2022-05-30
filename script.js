@@ -128,7 +128,7 @@ const decimalButton = document.querySelector('.decimal');
 
 decimalButton.addEventListener('click', () => {
 
-    if (text.value == "+" || text.value == "-" || text.value == "x" || text.value == "÷"){ //|| (inOperation)){
+    if (text.value == "+" || text.value == "-" || text.value == "x" || text.value == "÷"){
         text.value = "";
     }
     if (decimalButton.disabled == false){
@@ -136,3 +136,98 @@ decimalButton.addEventListener('click', () => {
         decimalButton.disabled = true;
     }
 });
+
+const backspaceButton = document.querySelector('.backspace');
+
+backspaceButton.addEventListener('click', () => {
+    text.value = text.value.substring(0, text.value.length - 1);
+});
+
+
+
+document.addEventListener('keydown', (event) => {
+    console.log(event.key);
+    if(text.value == "x" || text.value == "+" || text.value == "÷" || text.value == "-"){
+        text.value = "";
+    }
+
+    if(inOperation && (Number.isInteger(parseInt(text.value)))) {
+        firstOperand = text.value;
+        text.value = "";
+    }
+
+    if(event.key == 1 || event.key == 2 || event.key == 3 || event.key == 4 || event.key == 5 || event.key == 6 || event.key == 7 || event.key == 8 || event.key == 9 || event.key == 0){
+        text.value += event.key;
+    }
+
+    else if(event.key == "x" || event.key == "/" || event.key == "-" || event.key == "+" || event.key == "*" || event.key == "÷"){
+        decimalButton.disabled = false;
+
+        if(firstOperand){
+            inOperation = true;
+        }
+        if (text.value == "+" || text.value == "-" || text.value == "x" || text.value == "÷"){
+            text.value = event.key;
+
+            if (event.key == "/"){
+                text.value = "÷";
+            }
+            if (event.key == "*"){
+                text.value = "x";
+            }
+        }
+        else if(firstOperand && text.value && inOperation){
+            text.value = operate(parseFloat(firstOperand), parseFloat(text.value), currentOperator);
+            decimalButton.disabled = false;
+            firstOperand = "";
+        }
+        else{
+            if(Number.isInteger(parseInt(text.value))){
+                firstOperand = text.value;
+            }
+            text.value = event.key;
+
+            if (event.key == "/"){
+                text.value = "÷";
+            }
+            if (event.key == "*"){
+                text.value = "x";
+            }
+        }
+
+        currentOperator = event.key;
+        if (event.key == "/"){
+            currentOperator = "÷";
+        }
+        if (event.key == "*"){
+            currentOperator = "x";
+        }
+
+    }
+
+    else if(event.key == 'c'){
+        text.value = "";
+        firstOperand = null;
+        currentOperator = "";
+        inOperation = false;
+        decimalButton.disabled = false;
+    }
+
+    else if(event.key == '=' || event.key == 'Enter'){
+        if(!currentOperator || !text.value || !firstOperand){
+            //do nothing
+        }else{
+            text.value = operate(parseFloat(firstOperand), parseFloat(text.value), currentOperator);
+            console.log("Text.value: " + text.value);
+            inOperation = false;
+            firstOperand = "";
+            decimalButton.disabled = false;
+        }
+    }
+
+    else if(event.key == "Backspace"){
+        text.value = text.value.substring(0, text.value.length - 1);
+    }
+
+
+  }, false);

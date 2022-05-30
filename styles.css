@@ -1,3 +1,10 @@
+.backspace{
+    font-size: 21px;
+    padding-top: 9px;
+    padding-bottom: 3px;
+    padding-right: 3px;
+}
+
 button{
     font-size: 30px;
     width: 60px;
@@ -28,6 +35,9 @@ button{
 
 #text{
     padding-top: 6px;
-    direction: rtl;
+    text-align: right;
+    direction: ltr;
     font-size: 30px;
+    color: black;
+    background-color: white;
 }
