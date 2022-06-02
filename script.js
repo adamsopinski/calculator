@@ -52,7 +52,7 @@ let currentOperator = "";
 let firstOperand;
 let inOperation = false;
 var text = document.getElementById('text');
-
+let afterOperation = false;
 
 const digits = document.querySelectorAll('.num');
 
@@ -67,6 +67,11 @@ digits.forEach((digit) => {
             text.value = "";
         }
         
+        if(afterOperation){
+            text.value = "";
+            afterOperation = false;
+        }
+
         text.value += digit.textContent;
     });
 });
@@ -85,6 +90,7 @@ operators.forEach((operator) => {
         }
         else if(firstOperand && text.value && inOperation){
             text.value = operate(parseFloat(firstOperand), parseFloat(text.value), currentOperator);
+            afterOperation = true;
             decimalButton.disabled = false;
             firstOperand = "";
         }
@@ -117,6 +123,7 @@ equalsButton.addEventListener('click', () => {
         //do nothing
     }else{
         text.value = operate(parseFloat(firstOperand), parseFloat(text.value), currentOperator);
+        afterOperation = true;
         inOperation = false;
         firstOperand = "";
         decimalButton.disabled = false;
@@ -146,8 +153,8 @@ backspaceButton.addEventListener('click', () => {
 
 
 document.addEventListener('keydown', (event) => {
-    console.log(event.key);
-    if(text.value == "x" || text.value == "+" || text.value == "÷" || text.value == "-"){
+
+    if((text.value == "x" || text.value == "+" || text.value == "÷" || text.value == "-") && (event.key != "+" && event.key != "-" && event.key != "/" && event.key != "x" && event.key != "*" && event.key != "÷")){
         text.value = "";
     }
 
@@ -157,15 +164,20 @@ document.addEventListener('keydown', (event) => {
     }
 
     if(event.key == 1 || event.key == 2 || event.key == 3 || event.key == 4 || event.key == 5 || event.key == 6 || event.key == 7 || event.key == 8 || event.key == 9 || event.key == 0){
+        if(afterOperation){
+            text.value = "";
+            afterOperation = false;
+        }
         text.value += event.key;
     }
 
     else if(event.key == "x" || event.key == "/" || event.key == "-" || event.key == "+" || event.key == "*" || event.key == "÷"){
         decimalButton.disabled = false;
 
-        if(firstOperand){
+        if(firstOperand && (text.value != "x" && text.value != "÷" && text.value != "+" && text.value != "-")){
             inOperation = true;
         }
+
         if (text.value == "+" || text.value == "-" || text.value == "x" || text.value == "÷"){
             text.value = event.key;
 
@@ -176,8 +188,11 @@ document.addEventListener('keydown', (event) => {
                 text.value = "x";
             }
         }
+
+
         else if(firstOperand && text.value && inOperation){
             text.value = operate(parseFloat(firstOperand), parseFloat(text.value), currentOperator);
+            afterOperation = true;
             decimalButton.disabled = false;
             firstOperand = "";
         }
@@ -195,13 +210,7 @@ document.addEventListener('keydown', (event) => {
             }
         }
 
-        currentOperator = event.key;
-        if (event.key == "/"){
-            currentOperator = "÷";
-        }
-        if (event.key == "*"){
-            currentOperator = "x";
-        }
+        currentOperator = text.value;
 
     }
 
@@ -218,7 +227,7 @@ document.addEventListener('keydown', (event) => {
             //do nothing
         }else{
             text.value = operate(parseFloat(firstOperand), parseFloat(text.value), currentOperator);
-            console.log("Text.value: " + text.value);
+            afterOperation = true;
             inOperation = false;
             firstOperand = "";
             decimalButton.disabled = false;

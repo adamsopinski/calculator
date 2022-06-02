@@ -12,7 +12,7 @@ button{
 
 .calculator-inner-frame{
     border: solid;
-    border-radius: 10px;
+    border-radius: 8px;
     padding: 10px;
     background-color: gainsboro;
 }
